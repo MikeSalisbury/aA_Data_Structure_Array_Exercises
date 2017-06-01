@@ -9,8 +9,13 @@ end
 # order. Use the equality operator (==), which returns a boolean indicating
 # whether its operands are equal, e.g., 2 == 2 => true, ["cat", "dog"] ==
 # ["dog", "cat"] => false
-def in_order?(arr)
-  arr == arr.sort
+def in_order?(arr) # Rare sitation in which bubble sort would be more efficient
+  idx = 0
+  while idx < arr.size-1
+    return false if arr[idx] > arr[idx+1]
+    idx += 1
+  end
+  true
 end
 
 
@@ -18,26 +23,14 @@ end
 
 # Write a method that returns the number of vowels in its argument
 def num_vowels(str)
-  count = 0
-  str.chars do |l|
-    if "aeiou".include?(l.downcase)
-      count +=1
-    end
-  end
-  count
+  str.downcase.chars.count { |l| "aeiou".include?(l) }
 end
 
 # Write a method that returns its argument with all its vowels removed.
 def devowel(str)
-  result = ""
-  str.chars.each do |l|
-    if "aeiou".include?(l.downcase)
-      next
-    else
-      result << l
-    end
-  end
-  result
+  str.chars.reject do |l|
+    "aeiou".include?(l.downcase)
+  end.join
 end
 
 
@@ -47,11 +40,7 @@ end
 # non-negative integer in descending order and as strings, e.g.,
 # descending_digits(4291) #=> ["9", "4", "2", "1"]
 def descending_digits(int)
-  result = []
-  int_array = int.to_s.chars
-  int_array.map! {|el| el.to_i}
-  int_array = int_array.sort.reverse
-  int_array.map! {|el| el.to_s}
+  int.to_s.chars.sort.reverse
 end
 
 # Write a method that returns a boolean indicating whether a string has
@@ -70,15 +59,14 @@ end
 # Write a method that converts an array of ten integers into a phone number in
 # the format "(123) 456-7890".
 def to_phone_number(arr)
-  "(#{arr[0..2].join.to_i}) #{arr[3..5].join.to_i}-#{arr[6...arr.length].join.to_i}"
+  "(abc) def-ghij".tr("abcdefghij",arr.join.to_s) # Just to show it's possible :)
 end
 
 # Write a method that returns the range of a string of comma-separated integers,
 # e.g., str_range("4,1,8") #=> 7
 def str_range(str)
-  nums = str.split(",")
-  int_nums_arr = nums.map {|num| num.to_i}
-  int_nums_arr.max - int_nums_arr.min
+  nums = str.split(",").map(&:to_i)
+  nums.max - nums.min
 end
 
 
@@ -88,13 +76,15 @@ end
 # arrays. offset=1 ensures that the value of offset is 1 if no argument is
 # provided. HINT: use the take(num) and drop(num) methods. You won't need much
 # code, but the solution is tricky!
-def my_rotate(arr, offset=1)
-  if offset < 0
-    offset = (arr.length-1) - (offset.abs % arr.length-1)
-  else
-    offset = offset % arr.length
-  end
-  takes = arr.take(offset)
-  drops = arr.drop(offset)
-  result = drops + takes
+def my_rotate(arr, offset=1) # Made no changes. Looks elegant. Don't think I could do better
+  arr.drop(arr.take(offset))
+
+  # if offset < 0
+  #   offset = (arr.length-1) - (offset.abs % arr.length-1)
+  # else
+  #   offset = offset % arr.length
+  # end
+  # takes = arr.take(offset)
+  # drops = arr.drop(offset)
+  # result = drops + takes
 end
